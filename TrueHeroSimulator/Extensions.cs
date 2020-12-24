@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +35,17 @@ namespace TrueHeroSimulator
             int index = vals.IndexOf(phase);
             index = index == vals.Count ? 0 : index;
             return vals[++index];
+        }
+
+        public static Font ToFont(this byte[] bytes, int size)
+        {
+            PrivateFontCollection pfc = new PrivateFontCollection();
+            var fontLength = bytes.Length;
+            byte[] fontData = bytes;
+            IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontData, 0, data, fontLength);
+            pfc.AddMemoryFont(data, fontLength);
+            return new Font(pfc.Families[0], size);
         }
 
         public static GraphicsPath Round(this Rectangle bounds, int radius)

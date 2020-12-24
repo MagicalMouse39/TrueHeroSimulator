@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Runtime.ExceptionServices;
 
 namespace TrueHeroSimulator
 {
@@ -18,55 +19,46 @@ namespace TrueHeroSimulator
     {
         private string content = string.Empty;
         private Label textLbl;
-        private Font font;
-        private Task writeThread;
-        private bool threadStopped;
+        private System.Windows.Forms.Timer writer;
+        private int writerIndex = 0;
         public bool HasFinishedWriting { get; private set; }
+
 
         public UndyneDialogueBox(string content)
         {
             Control.CheckForIllegalCrossThreadCalls = false;
-            InitializeComponent();
 
-            this.content = content;
-            PrivateFontCollection pfc = new PrivateFontCollection();
-            var fontLength = GameResources.DeterminationFont.Length;
-            byte[] fontData = GameResources.DeterminationFont;
-            IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-            Marshal.Copy(fontData, 0, data, fontLength);
-            pfc.AddMemoryFont(data, fontLength);
-            this.font = new Font(pfc.Families[0], 16);
-            this.textLbl = new Label() { Width = 280, Height = 80, Left = 35, Top = 10, Font = this.font, BackColor = Color.White };
+            this.textLbl = new Label() { Width = 280, Height = 80, Left = 35, Top = 10, Font = GameResources.DeterminationFont.ToFont(16), BackColor = Color.White };
             this.HasFinishedWriting = false;
-            this.threadStopped = false;
-            
-            this.UpdateContent(this.content);
+            this.writer = new System.Windows.Forms.Timer();
+            this.writer.Interval = 40;
+            this.writer.Tick += (s, e) =>
+            {
+                if (this.textLbl.Text != this.content)
+                    this.textLbl.Text += this.content[this.writerIndex++];
+                else
+                    this.HasFinishedWriting = true;
+            };
+
+            this.UpdateContent(content);
             this.Controls.Add(this.textLbl);
         }
 
         public void UpdateContent(string content)
         {
             this.content = content;
-            this.threadStopped = false;
             this.HasFinishedWriting = false;
-            this.writeThread = Task.Factory.StartNew(() =>
-            {
-                int index = 0;
-                while (this.textLbl.Text != this.content && !this.threadStopped)
-                {
-                    this.textLbl.Text += this.content[index++];
-                    Thread.Sleep(40);
-                    this.textLbl.Refresh();
-                }
-                this.HasFinishedWriting = true;
-            });
+            this.writerIndex = 0;
             this.Visible = true;
+            if (!this.writer.Enabled)
+                this.writer.Start();
             this.Refresh();
         }
 
         public void StopWriteThread()
         {
-            this.threadStopped = true;
+            if (this.writer.Enabled)
+                this.writer.Stop();
             this.textLbl.Text = this.content;
             this.HasFinishedWriting = true;
         }
@@ -88,7 +80,6 @@ namespace TrueHeroSimulator
             points.Add(new PointF(25, 15));
             points.Add(new PointF(25, 35));
             g.FillPolygon(Brushes.White, points.ToArray());
-
 
             base.OnPaint(e);
         }

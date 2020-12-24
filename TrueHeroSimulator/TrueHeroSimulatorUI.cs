@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WMPLib;
@@ -14,20 +15,26 @@ namespace TrueHeroSimulator
 {
     class TrueHeroSimulatorUI : Form
     {
+        public static TrueHeroSimulatorUI Instance = new TrueHeroSimulatorUI();
+
         private PictureBox undyneSprite;
         private UndyneDialogueBox dialogueBox;
+        private FightCommands fightCommands;
 
         private WindowsMediaPlayer musicPlayer;
         private string musicTmpFile = string.Empty;
 
+        private bool buttonsSelectable;
         private int playerX, playerY;
-        private List<string> lastDialogueWritings;
 
-        private GamePhase phase;
+        private Rectangle screen;
 
-        public TrueHeroSimulatorUI()
+        internal GamePhase phase;
+        internal SoulColour soulColor;
+
+        private TrueHeroSimulatorUI()
         {
-            Rectangle screen = Screen.PrimaryScreen.Bounds;
+            this.screen = Screen.PrimaryScreen.Bounds;
             this.Width = 1000;
             this.Height = 800;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -35,21 +42,26 @@ namespace TrueHeroSimulator
             this.Text = "True Hero Simulator";
             Directory.CreateDirectory($@"C:\Users\{Environment.UserName}\AppData\Local\Temp\TrueHeroSimulator");
             this.musicTmpFile = $@"C:\Users\{Environment.UserName}\AppData\Local\Temp\TrueHeroSimulator\theme.mp3";
+            this.WindowState = FormWindowState.Maximized;
+            this.MinimumSize = new Size(500, 500);
             this.FormClosing += (s, e) => File.Delete(musicTmpFile);
 
             this.SizeChanged += (s, e) => UpdateComponentsPosition();
 
-            this.lastDialogueWritings = new List<string>();
-            this.lastDialogueWritings.Add("");
+            this.playerX = this.playerY = 0;
+            this.buttonsSelectable = false;
+
             this.phase = GamePhase.InitialDialogue;
+            this.soulColor = SoulColour.Green;
 
             //Undyne Sprite
             this.undyneSprite = new PictureBox();
             this.undyneSprite.Image = GameResources.UndyneSprite;
-            this.undyneSprite.Width = GameResources.UndyneSprite.Width;
-            this.undyneSprite.Height = GameResources.UndyneSprite.Height;
-            this.WindowState = FormWindowState.Maximized;
-            this.undyneSprite.Top = 100;
+            this.undyneSprite.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.undyneSprite.Width = this.screen.Width / 5;
+            this.undyneSprite.Height = this.screen.Height / 2;
+
+            this.undyneSprite.Top = 20;
             this.Controls.Add(this.undyneSprite);
 
             //Music Controller
@@ -62,9 +74,15 @@ namespace TrueHeroSimulator
 
             //Dialogue manager
             this.dialogueBox = new UndyneDialogueBox("You're gonna have to try a little harder than THAT");
-            this.dialogueBox.Top = 200;
+            this.dialogueBox.Top = 300;
             this.Controls.Add(dialogueBox);
             this.dialogueBox.BringToFront();
+
+            //Fight Commands
+            this.fightCommands = new FightCommands() { Left = this.screen.Width / 4, Top = this.screen.Height - this.screen.Height / 8 - 50 };
+
+            this.Controls.Add(this.fightCommands);
+            this.fightCommands.BringToFront();
 
             //Movement Manager
             this.PreviewKeyDown += (s, e) =>
@@ -75,12 +93,16 @@ namespace TrueHeroSimulator
                         this.playerY++;
                         break;
                     case Keys.Right:
+                        if (this.buttonsSelectable)
+                            this.fightCommands.SelectedButtonRight();
                         this.playerX++;
                         break;
                     case Keys.Down:
                         this.playerY--;
                         break;
                     case Keys.Left:
+                        if (this.buttonsSelectable)
+                            this.fightCommands.SelectedButtonLeft();
                         this.playerX--;
                         break;
                 }
@@ -89,7 +111,6 @@ namespace TrueHeroSimulator
             //Key Manager
             this.KeyDown += (s, e) =>
             {
-                Debug.WriteLine(e.KeyCode);
                 if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Z)
                 {
                     if (this.phase == GamePhase.InitialDialogue)
@@ -114,23 +135,38 @@ namespace TrueHeroSimulator
             {
                 case GamePhase.InitialDialogue:
                     if (this.dialogueBox.HasFinishedWriting)
+                    {
                         this.dialogueBox.Visible = false;
+                        this.buttonsSelectable = true;
+                        this.fightCommands.fightBtn.IsSelected = true;
+                    }
                     break;
             }
 
             switch (this.phase.Next())
             {
                 case GamePhase.LastDialogue:
-                    this.dialogueBox.UpdateContent("");
+                    this.dialogueBox.UpdateContent("You won!");
                     break;
             }
+
+            this.phase = this.phase.Next();
         }
 
         private void UpdateComponentsPosition()
         {
+            this.undyneSprite.Height = (int)(this.Height / 2.5);
+            this.undyneSprite.Width = this.undyneSprite.Height * 346 / 214;
             this.undyneSprite.Left = (this.Width - this.undyneSprite.Width) / 2;
 
-            this.dialogueBox.Left = this.undyneSprite.Left + 200;
+            this.dialogueBox.Top = this.undyneSprite.Height / 2;
+            this.dialogueBox.Left = (int)(this.undyneSprite.Left + this.undyneSprite.Width / 1.75);
+
+            this.fightCommands.Width = this.Width / 2;
+            this.fightCommands.Height = this.Height / 8;
+            this.fightCommands.Top = this.Height - this.Height / 8 - 50;
+            this.fightCommands.Left = this.Width / 4;
+            this.fightCommands.UpdateComponentsPosition();
         }
     }
 }

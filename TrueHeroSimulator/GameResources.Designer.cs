@@ -61,6 +61,16 @@ namespace TrueHeroSimulator {
         }
         
         /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ActIcon {
+            get {
+                object obj = ResourceManager.GetObject("ActIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Byte[].
         /// </summary>
         internal static byte[] DeterminationFont {
@@ -71,12 +81,72 @@ namespace TrueHeroSimulator {
         }
         
         /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GreenHeartIcon {
+            get {
+                object obj = ResourceManager.GetObject("GreenHeartIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HeartIcon {
+            get {
+                object obj = ResourceManager.GetObject("HeartIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemIcon {
+            get {
+                object obj = ResourceManager.GetObject("ItemIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Byte[].
+        /// </summary>
+        internal static byte[] MarsNeedsCunnilingusFont {
+            get {
+                object obj = ResourceManager.GetObject("MarsNeedsCunnilingusFont", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MercyIcon {
+            get {
+                object obj = ResourceManager.GetObject("MercyIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Byte[].
         /// </summary>
         internal static byte[] MusicTheme {
             get {
                 object obj = ResourceManager.GetObject("MusicTheme", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SwordIcon {
+            get {
+                object obj = ResourceManager.GetObject("SwordIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -118,11 +118,32 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ActIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ActIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeterminationFont" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DeterminationFont.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="GreenHeartIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GreenHeartIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HeartIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HeartIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ItemIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ItemIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MarsNeedsCunnilingusFont" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MarsNeedsCunnilingusFont.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MercyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MercyIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MusicTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\MusicTheme.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SwordIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SwordIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="UndyneSprite" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\UndyneSprite.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
