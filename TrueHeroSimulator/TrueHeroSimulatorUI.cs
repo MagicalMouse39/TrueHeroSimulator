@@ -20,6 +20,11 @@ namespace TrueHeroSimulator
         private WindowsMediaPlayer musicPlayer;
         private string musicTmpFile = string.Empty;
 
+        private int playerX, playerY;
+        private List<string> lastDialogueWritings;
+
+        private GamePhase phase;
+
         public TrueHeroSimulatorUI()
         {
             Rectangle screen = Screen.PrimaryScreen.Bounds;
@@ -33,6 +38,10 @@ namespace TrueHeroSimulator
             this.FormClosing += (s, e) => File.Delete(musicTmpFile);
 
             this.SizeChanged += (s, e) => UpdateComponentsPosition();
+
+            this.lastDialogueWritings = new List<string>();
+            this.lastDialogueWritings.Add("");
+            this.phase = GamePhase.InitialDialogue;
 
             //Undyne Sprite
             this.undyneSprite = new PictureBox();
@@ -52,21 +61,69 @@ namespace TrueHeroSimulator
             this.musicPlayer.controls.play();
 
             //Dialogue manager
-            this.dialogueBox = new UndyneDialogueBox("...");
+            this.dialogueBox = new UndyneDialogueBox("You're gonna have to try a little harder than THAT");
             this.dialogueBox.Top = 200;
             this.Controls.Add(dialogueBox);
             this.dialogueBox.BringToFront();
 
+            //Movement Manager
+            this.PreviewKeyDown += (s, e) =>
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                        this.playerY++;
+                        break;
+                    case Keys.Right:
+                        this.playerX++;
+                        break;
+                    case Keys.Down:
+                        this.playerY--;
+                        break;
+                    case Keys.Left:
+                        this.playerX--;
+                        break;
+                }
+            };
+
             //Key Manager
             this.KeyDown += (s, e) =>
             {
+                Debug.WriteLine(e.KeyCode);
                 if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Z)
                 {
-
+                    if (this.phase == GamePhase.InitialDialogue)
+                    {
+                        this.UpdateGamePhase();
+                        return;
+                    }
+                }
+                if (e.KeyCode == Keys.Shift || e.KeyCode == Keys.X || e.KeyCode == Keys.ShiftKey)
+                {
+                    if (this.dialogueBox.Visible)
+                        this.dialogueBox.StopWriteThread();
                 }
             };
 
             UpdateComponentsPosition();
+        }
+
+        private void UpdateGamePhase()
+        {
+            switch (this.phase)
+            {
+                case GamePhase.InitialDialogue:
+                    if (this.dialogueBox.HasFinishedWriting)
+                        this.dialogueBox.Visible = false;
+                    break;
+            }
+
+            switch (this.phase.Next())
+            {
+                case GamePhase.LastDialogue:
+                    this.dialogueBox.UpdateContent("");
+                    break;
+            }
         }
 
         private void UpdateComponentsPosition()

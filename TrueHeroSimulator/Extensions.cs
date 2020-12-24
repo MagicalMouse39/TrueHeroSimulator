@@ -27,6 +27,14 @@ namespace TrueHeroSimulator
             return bmp;
         }
 
+        public static GamePhase Next(this GamePhase phase)
+        {
+            var vals = Enum.GetValues(typeof(GamePhase)).OfType<GamePhase>().ToList();
+            int index = vals.IndexOf(phase);
+            index = index == vals.Count ? 0 : index;
+            return vals[++index];
+        }
+
         public static GraphicsPath Round(this Rectangle bounds, int radius)
         {
             int diameter = radius * 2;

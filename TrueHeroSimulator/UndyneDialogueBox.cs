@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace TrueHeroSimulator
 {
@@ -18,9 +19,13 @@ namespace TrueHeroSimulator
         private string content = string.Empty;
         private Label textLbl;
         private Font font;
+        private Task writeThread;
+        private bool threadStopped;
+        public bool HasFinishedWriting { get; private set; }
 
         public UndyneDialogueBox(string content)
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
 
             this.content = content;
@@ -31,16 +36,39 @@ namespace TrueHeroSimulator
             Marshal.Copy(fontData, 0, data, fontLength);
             pfc.AddMemoryFont(data, fontLength);
             this.font = new Font(pfc.Families[0], 16);
-            this.textLbl = new Label() { Text = this.content, Width = 280, Height = 80, Left = 35, Top = 10, Font = this.font, BackColor = Color.White };
+            this.textLbl = new Label() { Width = 280, Height = 80, Left = 35, Top = 10, Font = this.font, BackColor = Color.White };
+            this.HasFinishedWriting = false;
+            this.threadStopped = false;
+            
+            this.UpdateContent(this.content);
             this.Controls.Add(this.textLbl);
         }
 
         public void UpdateContent(string content)
         {
             this.content = content;
-            this.textLbl.Text = this.content;
+            this.threadStopped = false;
+            this.HasFinishedWriting = false;
+            this.writeThread = Task.Factory.StartNew(() =>
+            {
+                int index = 0;
+                while (this.textLbl.Text != this.content && !this.threadStopped)
+                {
+                    this.textLbl.Text += this.content[index++];
+                    Thread.Sleep(40);
+                    this.textLbl.Refresh();
+                }
+                this.HasFinishedWriting = true;
+            });
             this.Visible = true;
             this.Refresh();
+        }
+
+        public void StopWriteThread()
+        {
+            this.threadStopped = true;
+            this.textLbl.Text = this.content;
+            this.HasFinishedWriting = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)
