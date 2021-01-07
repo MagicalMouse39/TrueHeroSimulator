@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using TrueHeroSimulator.Buttons;
 
 namespace TrueHeroSimulator
 {
     class FightCommands : Panel
     {
         private LifeBar lifeBar;
-        internal UndertaleButton fightBtn, actBtn, itemBtn, mercyBtn;
+
+        internal FightButton fightBtn;
+        internal ActButton actBtn;
+        internal ItemButton itemBtn;
+        internal MercyButton mercyBtn;
 
         private Rectangle screen;
 
@@ -29,10 +28,10 @@ namespace TrueHeroSimulator
             int l = this.Width / 4;
             int t = l - this.Width / 15;
 
-            this.fightBtn = new UndertaleButton("FIGHT", GameResources.SwordIcon) { Left = 0, Top = this.Height / 3, Width = t };
-            this.actBtn = new UndertaleButton("ACT", GameResources.ActIcon) { Left = l, Top = this.Height / 3, Width = t };
-            this.itemBtn = new UndertaleButton("ITEM", GameResources.ItemIcon) { Left = 2 * l, Top = this.Height / 3, Width = t };
-            this.mercyBtn = new UndertaleButton("MERCY", GameResources.MercyIcon) { Left = 3 * l, Top = this.Height / 3, Width = t };
+            this.fightBtn = new FightButton() { Left = 0, Top = this.Height / 3, Width = t };
+            this.actBtn = new ActButton() { Left = l, Top = this.Height / 3, Width = t };
+            this.itemBtn = new ItemButton() { Left = 2 * l, Top = this.Height / 3, Width = t };
+            this.mercyBtn = new MercyButton() { Left = 3 * l, Top = this.Height / 3, Width = t };
             this.Controls.Add(this.fightBtn);
             this.Controls.Add(this.actBtn);
             this.Controls.Add(this.itemBtn);
@@ -127,7 +126,7 @@ namespace TrueHeroSimulator
             text = "HP";
             g.DrawString(text, textFont, Brushes.White, w + this.Width / 25, 0);
             w += g.MeasureString(text, textFont).Width + this.Width / 25;
-            
+
             this.lifeBar.Left = (int)w;
             w += this.lifeBar.Width + this.Width / 25;
 

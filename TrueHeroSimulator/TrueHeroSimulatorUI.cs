@@ -20,6 +20,7 @@ namespace TrueHeroSimulator
         private PictureBox undyneSprite;
         private UndyneDialogueBox dialogueBox;
         private FightCommands fightCommands;
+        private FightPanel fightPanel;
 
         private WindowsMediaPlayer musicPlayer;
         private string musicTmpFile = string.Empty;
@@ -60,7 +61,6 @@ namespace TrueHeroSimulator
             this.undyneSprite.SizeMode = PictureBoxSizeMode.StretchImage;
             this.undyneSprite.Width = this.screen.Width / 5;
             this.undyneSprite.Height = this.screen.Height / 2;
-
             this.undyneSprite.Top = 20;
             this.Controls.Add(this.undyneSprite);
 
@@ -77,6 +77,11 @@ namespace TrueHeroSimulator
             this.dialogueBox.Top = 300;
             this.Controls.Add(dialogueBox);
             this.dialogueBox.BringToFront();
+
+            //Fight Panel
+            this.fightPanel = new FightPanel() { Left = this.screen.Width / 4, Top = this.screen.Height / 2 };
+            this.Controls.Add(this.fightPanel);
+            this.fightPanel.BringToFront();
 
             //Fight Commands
             this.fightCommands = new FightCommands() { Left = this.screen.Width / 4, Top = this.screen.Height - this.screen.Height / 8 - 50 };
@@ -118,6 +123,25 @@ namespace TrueHeroSimulator
                         this.UpdateGamePhase();
                         return;
                     }
+                    if (this.buttonsSelectable)
+                    {
+                        if (this.fightCommands.fightBtn.IsSelected)
+                        {
+                            this.fightPanel.SetView(FightView.Fight);
+                        }
+                        else if (this.fightCommands.actBtn.IsSelected)
+                        {
+                            this.fightPanel.SetView(FightView.Act);
+                        }
+                        else if (this.fightCommands.itemBtn.IsSelected)
+                        {
+                            this.fightPanel.SetView(FightView.Item);
+                        }
+                        else if (this.fightCommands.mercyBtn.IsSelected)
+                        {
+                            this.fightPanel.SetView(FightView.Mercy);
+                        }
+                    }
                 }
                 if (e.KeyCode == Keys.Shift || e.KeyCode == Keys.X || e.KeyCode == Keys.ShiftKey)
                 {
@@ -139,6 +163,7 @@ namespace TrueHeroSimulator
                         this.dialogueBox.Visible = false;
                         this.buttonsSelectable = true;
                         this.fightCommands.fightBtn.IsSelected = true;
+                        this.fightPanel.Dialog.Text = "* The heroine appears.";
                     }
                     break;
             }
@@ -156,7 +181,7 @@ namespace TrueHeroSimulator
         private void UpdateComponentsPosition()
         {
             this.undyneSprite.Height = (int)(this.Height / 2.5);
-            this.undyneSprite.Width = this.undyneSprite.Height * 346 / 214;
+            this.undyneSprite.Width = this.undyneSprite.Height * 346 / 240;
             this.undyneSprite.Left = (this.Width - this.undyneSprite.Width) / 2;
 
             this.dialogueBox.Top = this.undyneSprite.Height / 2;

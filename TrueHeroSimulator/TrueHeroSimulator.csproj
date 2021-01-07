@@ -51,10 +51,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buttons\ActButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Buttons\FightButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Buttons\ItemButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Buttons\MercyButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FightCommands.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FightPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FightView.cs" />
     <Compile Include="GamePhase.cs" />
     <Compile Include="GameResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -70,7 +86,7 @@
     <Compile Include="TrueHeroSimulatorUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UndertaleButton.cs">
+    <Compile Include="Buttons\UndertaleButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UndyneDialogueBox.cs">
